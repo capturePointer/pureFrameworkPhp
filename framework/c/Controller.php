@@ -9,7 +9,7 @@ class Controller{
 		}
 		$tplFile = "v/" . $_c . "_" . $_a . ".html";
 		header("Content-type: text/html; charset=utf-8"); 
-		require FRAMEWORK_DIR . "/" . $tplFile;
+		require APP_DIR . "/" . $tplFile;
 	}
 	protected function assign($name,$value){
 		$this->vars[$name] = $value;
