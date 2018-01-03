@@ -103,7 +103,8 @@ class Mysqli_Database {
 
 				foreach($args as $arg){
 					$types[] = is_int($arg) ? 'i' : (is_float($arg) ? 'd' : 's');
-					$params[] = $this->connection->real_escape_string($arg);
+					//$params[] = $this->connection->real_escape_string($arg);
+					$params[] = $arg;
 				}
 
 				# Stick the types at the start of the params

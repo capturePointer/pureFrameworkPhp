@@ -16,7 +16,16 @@ class Controller{
 	}
 	
 	public function init(){
+		global $configs;
 		date_default_timezone_set("Asia/Shanghai");
+		session_start();
+		if(isset($configs['urlLoginJump'])){
+			setcookie("urlLoginJump", $configs['urlLoginJump'], 0,'/');
+		}
+		if(isset($configs['urlReturn'])){
+			setcookie("urlReturn", $configs['urlReturn'], 0,'/');
+		}
+		$this->assign('configs',$configs);
 	}
 	
 	public function finish(){

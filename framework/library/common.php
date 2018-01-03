@@ -31,6 +31,21 @@ function urlPublic($file){
 	}
 	return $url;
 }
+
+function urlUpload($file){
+	$file = "/upload/" . $file;
+	if(isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])){
+		$url = str_replace("index.php",$file,$_SERVER['PHP_SELF']);
+	}
+	else if(isset($_SERVER['SCRIPT_NAME']) && !empty($_SERVER['SCRIPT_NAME'])){
+		$url = str_replace("index.php",$file,$_SERVER['SCRIPT_NAME']);
+	}
+	else{
+		$url = "/" . $file;
+	}
+	return $url;
+}
+
 function getRandomUserAgent(){
     $userAgents = array(
         "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6",
@@ -55,4 +70,25 @@ function curlGet($url){
     $output=curl_exec($ch);
     curl_close($ch);
     return $output;
+}
+
+function getRandChar($length){
+	$str = "";
+	$strPol = "ABCDEFGHIJKLMNOP@QRSTUVWXYZ012345|-+!6789abcdefghijklmnopqrstuvwxyz";
+	$max = strlen($strPol)-1;
+
+	for($i=0;$i<$length;$i++){
+		$str.=$strPol[rand(0,$max)];//rand($min,$max)生成介于min和max两个数之间的一个随机整数
+	}
+	
+	return $str;
+}
+
+function isLogined(){
+	if(isset($_SESSION['member']) && $_SESSION['member']['id'] > 0){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
