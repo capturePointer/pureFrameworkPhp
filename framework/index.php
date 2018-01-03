@@ -5,6 +5,8 @@ define("FRAMEWORK_DIR",dirname(__FILE__));
 require_once(FRAMEWORK_DIR . "/library/common.php");
 require_once(FRAMEWORK_DIR . "/library/Mysqli_Database.php");
 require_once(APP_DIR . "/config/config.php");
+route();
+print_r($_SERVER);exit;
 if(isset($_GET['_c'])){
 	$_c = trim($_GET['_c']);
 }

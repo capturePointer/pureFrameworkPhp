@@ -10,7 +10,10 @@ function getConfigs(){
                 "db" => "demo",
                 "charset" => "utf8"
             )
-        )
+        ),
+        'route' => array(
+            '' => '',
+        ),
     );
     return $configs;
 }

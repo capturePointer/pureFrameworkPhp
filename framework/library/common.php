@@ -92,3 +92,19 @@ function isLogined(){
 		return false;
 	}
 }
+
+
+function route(){
+    $SCRIPT_NAME = $_SERVER['SCRIPT_NAME'];
+    $REQUEST_URI = $_SERVER['REQUEST_URI'];
+    $SCRIPT_NAME_ARR = explode("/", $SCRIPT_NAME);
+    $REQUEST_URI_ARR = explode("/", $REQUEST_URI);
+    $q = array();
+    for($i = count($SCRIPT_NAME_ARR) - 1; $i <= count($REQUEST_URI_ARR) - 1; $i++){
+        $q[] = $REQUEST_URI_ARR[$i];
+    }
+    $q = implode('/', $q);
+    echo $q;
+    exit;
+    
+}
