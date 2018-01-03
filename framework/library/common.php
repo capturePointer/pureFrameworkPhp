@@ -1,21 +1,22 @@
 <?php
-function url($c,$a,$params = array()){
-	$uri = "?_c=" . $c . "&" . "_a=" . $a;
-	if(!empty($params) && is_array($params)){
-		foreach($params as $key=>$value){
-			$uri = $uri . "&" . $key . "=" . urlencode($value);
-		}
-	}
-	if(isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])){
-		$url = $_SERVER['PHP_SELF'] . $uri;
-	}
-	else if(isset($_SERVER['SCRIPT_NAME']) && !empty($_SERVER['SCRIPT_NAME'])){
-		$url = $_SERVER['SCRIPT_NAME'] . $uri;
-	}
-	else{
-		$url = "/index.php" . $uri;
-	}
-	return $url;
+function url($uri,$params = array()){
+    if(!empty($params) && is_array($params)){
+        $queryArr = array();
+        foreach($params as $key=>$value){
+            $queryArr[] = $key . "=" . urlencode($value);
+        }
+        $uri = $uri . '?' . implode('&', $queryArr);
+    }
+    if(isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])){
+        $url = getBaseUri() . "/" . $uri;
+    }
+    else if(isset($_SERVER['SCRIPT_NAME']) && !empty($_SERVER['SCRIPT_NAME'])){
+        $url = getBaseUri() . "/" . $uri;
+    }
+    else{
+        $url = "/" . $uri;
+    }
+    return $url;
 }
 
 function urlPublic($file){
@@ -46,31 +47,6 @@ function urlUpload($file){
 	return $url;
 }
 
-function getRandomUserAgent(){
-    $userAgents = array(
-        "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6",
-        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)",
-        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30)",
-        "Opera/9.20 (Windows NT 6.0; U; en)",
-        "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; en) Opera 8.50",
-        "Mozilla/4.0 (compatible; MSIE 6.0; MSIE 5.5; Windows NT 5.1) Opera 7.02 [en]",
-        "Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; fr; rv:1.7) Gecko/20040624 Firefox/0.9",
-        "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/48 (like Gecko) Safari/48"
-    );
-    $random = rand(0,count($userAgents)-1);
-    return $userAgents[$random];
-}
-
-function curlGet($url){
-    $ch = curl_init();  
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-    curl_setopt($ch,CURLOPT_USERAGENT,getRandomUserAgent());
-//  curl_setopt($ch,CURLOPT_HEADER, false); 
-    $output=curl_exec($ch);
-    curl_close($ch);
-    return $output;
-}
 
 function getRandChar($length){
 	$str = "";
@@ -84,27 +60,36 @@ function getRandChar($length){
 	return $str;
 }
 
-function isLogined(){
-	if(isset($_SESSION['member']) && $_SESSION['member']['id'] > 0){
-		return true;
-	}
-	else{
-		return false;
-	}
+function getBaseUri(){
+    $SCRIPT_NAME = $_SERVER['SCRIPT_NAME'];
+    $SCRIPT_NAME_ARR = explode("/", $SCRIPT_NAME);
+    array_shift($SCRIPT_NAME_ARR);
+    $uriArr = array();
+    for($i = 0; $i < count($SCRIPT_NAME_ARR) - 1; $i++){
+        $uriArr[] = $SCRIPT_NAME_ARR[$i];
+    }
+    $uri = "/" . implode('/', $uriArr);
+    $uri = parse_url($uri, PHP_URL_PATH );
+    return $uri;
 }
 
-
-function route(){
+function getUri(){
     $SCRIPT_NAME = $_SERVER['SCRIPT_NAME'];
     $REQUEST_URI = $_SERVER['REQUEST_URI'];
     $SCRIPT_NAME_ARR = explode("/", $SCRIPT_NAME);
     $REQUEST_URI_ARR = explode("/", $REQUEST_URI);
-    $q = array();
+    $uriArr = array();
     for($i = count($SCRIPT_NAME_ARR) - 1; $i <= count($REQUEST_URI_ARR) - 1; $i++){
-        $q[] = $REQUEST_URI_ARR[$i];
+        $uriArr[] = $REQUEST_URI_ARR[$i];
     }
-    $q = implode('/', $q);
-    echo $q;
-    exit;
-    
+    $uri = "/" . implode('/', $uriArr);
+    $uri = parse_url($uri, PHP_URL_PATH );
+    return $uri;
+}
+
+function getUriSegments(){
+    $uri = getUri();
+    $segments = explode('/',trim($uri));
+    array_shift($segments);
+    return $segments;
 }

@@ -11,9 +11,6 @@ function getConfigs(){
                 "charset" => "utf8"
             )
         ),
-        'route' => array(
-            '' => '',
-        ),
     );
     return $configs;
 }
