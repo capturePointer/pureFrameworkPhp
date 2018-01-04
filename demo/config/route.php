@@ -11,6 +11,7 @@
  *      ':num' => '[0-9]+',
  *      ':all' => '.*'
  */
+Router::get('/', 'Index@index');
 Router::get('/:any', 'Index@index');
 Router::get('page', 'Index@page');
 Router::get('view/(:num)', 'Index@view');
