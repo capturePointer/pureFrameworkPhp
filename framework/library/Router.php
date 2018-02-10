@@ -73,7 +73,7 @@ class Router {
       foreach ($route_pos as $route) {
 
         // Using an ANY option to match both GET and POST requests
-        if (self::$methods[$route] == $method || self::$methods[$route] == 'ANY' || in_array($method, self::$maps[$route])) {
+        if (self::$methods[$route] == $method || self::$methods[$route] == 'ANY' || (is_array(self::$maps[$route]) && in_array($method, self::$maps[$route]))) {
           $found_route = true;
 
           // If route is not an object
